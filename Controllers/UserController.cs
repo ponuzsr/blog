@@ -70,6 +70,9 @@ namespace blog.Controllers
                     {
                         existingUser.Title = updateUserDto.Title;
                         existingUser.Description = updateUserDto.Description;
+                        existingUser.CreatedTime = DateTime.UtcNow;
+                        existingUser.LastUpdated = DateTime.UtcNow;
+
 
                         context.adatok.Update(existingUser);
                         context.SaveChanges();
