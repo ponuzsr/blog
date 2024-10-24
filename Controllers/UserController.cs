@@ -1,5 +1,7 @@
 ﻿using blog.Models;
 using Microsoft.AspNetCore.Mvc;
+using static blog.Models.Dto;
+using Microsoft.AspNetCore.Http;
 
 namespace blog.Controllers
 {
@@ -13,7 +15,7 @@ namespace blog.Controllers
             {
                 using (var context = new UserDbContext())
                 {
-                    return Ok(context.NewUsers.ToList());
+                    return Ok(context.adatok.ToList());
                 }
 
             }
@@ -22,7 +24,7 @@ namespace blog.Controllers
             {
                 using (var context = new UserDbContext())
                 {
-                    var user = context.NewUsers.SingleOrDefault(x => x.Id == id);
+                    var user = context.adatok.SingleOrDefault(x => x.Id == id);
 
                     if (user != null)
                     {
@@ -41,14 +43,14 @@ namespace blog.Controllers
                     {
                         Id = Guid.NewGuid(),
                         Title = createUserDto.Title,
-                        Decsription = createUserDto.Description,
-                        CreatedTime = createUserDto.CreatedTime,
-                        LastUpdated = createUserDto.LastUpdated,
+                        Description = createUserDto.Description,
+                        CreatedTime = DateTime.UtcNow,
+                        LastUpdated = DateTime.UtcNow,
                     };
 
                     if (user != null)
                     {
-                        context.NewUsers.Add(user);
+                        context.adatok.Add(user);
                         context.SaveChanges();
                         return StatusCode(201, user);
                     }
@@ -59,18 +61,17 @@ namespace blog.Controllers
             }
 
             [HttpPut]
-            public ActionResult<User> Put(Guid id, Dto.UpdateUserDto updateUserDto)
+            public ActionResult<User> Put(Guid id, UpdateUserDto updateUserDto)
             {
                 using (var context = new UserDbContext())
                 {
-                    var existingUser = context.NewUsers.FirstOrDefault(x => x.Id == id);
+                    var existingUser = context.adatok.FirstOrDefault(x => x.Id == id);
                     if (existingUser != null)
                     {
                         existingUser.Title = updateUserDto.Title;
-                        existingUser.Decsription = updateUserDto.Description;
-                        existingUser.CreatedTime = updateUserDto.CreatedTime;
+                        existingUser.Description = updateUserDto.Description;
 
-                        context.NewUsers.Update(existingUser);
+                        context.adatok.Update(existingUser);
                         context.SaveChanges();
                         return StatusCode(200, existingUser);
                     }
@@ -82,10 +83,10 @@ namespace blog.Controllers
             {
                 using (var context = new UserDbContext())
                 {
-                    var user = context.NewUsers.FirstOrDefault(x => x.Id == id);
+                    var user = context.adatok.FirstOrDefault(x => x.Id == id);
                     if (user != null)
                     {
-                        context.NewUsers.Remove(user);
+                        context.adatok.Remove(user);
                         context.SaveChanges();
 
                         return StatusCode(204, new { message = "Sikeres törlés!" });

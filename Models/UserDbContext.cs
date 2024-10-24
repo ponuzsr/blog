@@ -13,11 +13,11 @@ namespace blog.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                string conn = "server=localhost; database=Users; user=root; password=";
+                string conn = "server=localhost; database=blog; user=root; password=";
 
                 optionsBuilder.UseMySQL(conn);
             }
         }
-        public DbSet<User> NewUsers { get; set; } = null!;
+        public DbSet<User> adatok { get; set; } = null!;
     }
 }
